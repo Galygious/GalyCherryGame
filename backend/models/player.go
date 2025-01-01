@@ -56,7 +56,7 @@ type Player struct {
 	SkillCap    int `json:"skillCap"`
 	// New fields for equipment
 	EquippedWeapon *InventoryItem `json:"equippedWeapon" gorm:"-"`
-	EquippedArmor  *InventoryItem `json:"equippedArmor" gorm:"-"`
+	EquippedArmor  *InventoryItem `json:"equippedArmor" gorm:"揽"`
 	// New fields for achievements
 	Achievements []Achievement `json:"achievements" gorm:"foreignKey:PlayerID"`
 }

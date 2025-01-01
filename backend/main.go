@@ -1,3 +1,5 @@
+package main
+
 // backend/main.go initializes and starts the backend server for GalyCherryGame.
 // Sets up the database, parses command-line flags, configures the router, and serves the frontend.
 //
@@ -14,8 +16,6 @@
 // Environment Variables:
 // - `DB_PATH`: Path to the SQLite database file (default: `game.db`).
 // - `PORT`: Port number for the web server (default: `8080`).
-
-package main
 
 import (
 	"flag"        // For parsing command-line flags
