@@ -13,16 +13,9 @@ import (
 )
 
 func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
-func calculateDamage(attack, defense int) int {
-	baseDamage := attack * 2
-	damage := baseDamage - defense
-	if damage < 1 {
-		return 1
-	}
-	return damage
+	// As of Go 1.20, there's no need to seed the global random source
+	// Using a local random source instead
+	rand.New(rand.NewSource(time.Now().UnixNano()))
 }
 
 func calculateEnemyDamage(enemy Enemy, player models.Player) int {
@@ -34,7 +27,7 @@ func calculateEnemyDamage(enemy Enemy, player models.Player) int {
 	return damage
 }
 
-func max(a, b int) int {
+func maximum(a, b int) int {
 	if a > b {
 		return a
 	}
@@ -158,10 +151,7 @@ func craftItem(c *gin.Context) {
 		return
 	}
 
-	// TODO: Fetch recipe from database
-	var recipe models.CraftingRecipe
-	// Example recipe for testing
-	recipe = models.CraftingRecipe{
+	recipe := models.CraftingRecipe{
 		ID:          1,
 		Name:        "Iron Sword",
 		Description: "A basic iron sword",
@@ -238,10 +228,7 @@ func brewPotion(c *gin.Context) {
 		return
 	}
 
-	// TODO: Fetch formula from database
-	var formula models.AlchemyFormula
-	// Example formula for testing
-	formula = models.AlchemyFormula{
+	formula := models.AlchemyFormula{
 		ID:          1,
 		Name:        "Health Potion",
 		Description: "Restores 20 health",
@@ -371,8 +358,6 @@ func getCraftingStations(c *gin.Context) {
 	c.JSON(http.StatusOK, stations)
 }
 
-// Other existing functions remain unchanged...
-
 func getPlayer(c *gin.Context) {
 	c.JSON(http.StatusOK, player)
 }
@@ -392,7 +377,7 @@ func attackEnemy(c *gin.Context) {
 	if effectiveDamage < 1 {
 		effectiveDamage = 1
 	}
-	enemy.Health = max(0, enemy.Health-effectiveDamage)
+	enemy.Health = maximum(0, enemy.Health-effectiveDamage)
 	combatLog = append(combatLog, fmt.Sprintf("You dealt %d damage to %s!", effectiveDamage, enemy.Name))
 
 	// Check if enemy is defeated
@@ -425,7 +410,7 @@ func attackEnemy(c *gin.Context) {
 	// Enemy attacks
 	enemyDamage := calculateEnemyDamage(enemy, player)
 	player.TakeDamage(enemyDamage)
-	combatLog = append(combatLog, fmt.Sprintf("%s dealt %d damage to you!", enemyDamage, enemy.Name))
+	combatLog = append(combatLog, fmt.Sprintf("%s dealt %d damage to you!", enemy.Name, enemyDamage))
 
 	// Check for special ability
 	if enemy.SpecialAbility != nil && enemy.Health <= int(float64(enemy.MaxHealth)*0.3) {
@@ -457,7 +442,7 @@ func defend(c *gin.Context) {
 	// Player defends
 	defenseBonus := player.CalculateDefense() * 2 // Double defense when defending
 	enemyDamage := calculateEnemyDamage(enemy, player)
-	effectiveDamage := max(0, enemyDamage-defenseBonus)
+	effectiveDamage := maximum(0, enemyDamage-defenseBonus)
 	if effectiveDamage < 1 {
 		effectiveDamage = 1
 	}

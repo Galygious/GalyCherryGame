@@ -16,7 +16,7 @@ type Mob struct {
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
-func (m *Mob) BeforeSave(tx *gorm.DB) error {
+func (m *Mob) BeforeSave(_ *gorm.DB) error {
 	m.UpdatedAt = time.Now()
 	return nil
 }
