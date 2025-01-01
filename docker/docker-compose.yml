@@ -1,12 +1,28 @@
-version: '3.8'
-
 services:
   app:
-    build: .
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - ./db:/app/db
     environment:
-      - ENV=development
-    restart: unless-stopped
+      - DB_PATH=/data/game.db
+      - GIN_MODE=release
+    volumes:
+      - game-data:/data
+    depends_on:
+      - migrations
+
+  migrations:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: ["./server", "-migrate"]
+    environment:
+      - DB_PATH=/data/game.db
+    volumes:
+      - game-data:/data
+    restart: on-failure
+
+volumes:
+  game-data:
