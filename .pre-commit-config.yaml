@@ -1,0 +1,26 @@
+repos:
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.54.0
+    hooks:
+      - id: golangci-lint
+        entry: golangci-lint run
+        types: [go]
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: gofumpt
+        name: gofumpt
+        entry: gofumpt -l -w .
+        language: system
+        types: [go]
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: go-fmt
+        name: go fmt
+        entry: go fmt ./...
+        language: system
+        types: [go]
+        pass_filenames: false

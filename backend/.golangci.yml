@@ -1,0 +1,32 @@
+run:
+  timeout: 2m
+
+linters-settings:
+  shadow:
+    strict: true
+  staticcheck:
+    checks: ["all"]
+  gofumpt:
+    extra-rules: true
+
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+    - misspell
+    - revive
+
+issues:
+  exclude-dirs:
+    - vendor
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - errcheck
+        - gosec
+  max-same-issues: 30
