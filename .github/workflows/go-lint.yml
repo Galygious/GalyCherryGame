@@ -16,12 +16,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install Frontend Dependencies
         run: |
           cd frontend
           npm install
+          npm update
 
       - name: Run ESLint
         run: |
@@ -35,8 +36,7 @@ jobs:
 
       - name: Install GolangCI-Lint
         run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s latest
-          sudo mv golangci-lint /usr/local/bin/
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.63.0
 
       - name: Run GolangCI-Lint
         run: |
