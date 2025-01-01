@@ -24,7 +24,7 @@ func main() {
 
 	// Ensure database directory exists
 	dbDir := filepath.Dir(dbPath)
-	if err := os.MkdirAll(dbDir, 0755); err != nil {
+	if err := os.MkdirAll(dbDir, 0o755); err != nil {
 		log.Fatal("Failed to create database directory:", err)
 	}
 
